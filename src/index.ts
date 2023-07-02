@@ -4,9 +4,9 @@ dotenv.config();
 
 import User from './controllers';
 import { InvalidIdError } from './errors';
+import { getReqData, validateBody } from './utils';
 
 const PORT = process.env.PORT || 4000;
-const users = [];
 
 const server = http.createServer(async (req, res) => {
 	if (req.url === '/api/users' && req.method === 'GET') {
@@ -20,13 +20,26 @@ const server = http.createServer(async (req, res) => {
 			res.writeHead(200, { 'Content-Type': 'application/json' });
 			res.end(JSON.stringify(user));
 		} catch (error) {
-			if (error instanceof InvalidIdError) {
-				res.writeHead(400, { 'Content-Type': 'application/json' });
-				res.end(JSON.stringify({ message: error.message }));
-			} else {
-				res.writeHead(404, { 'Content-Type': 'application/json' });
-				res.end(JSON.stringify({ message: error.message }));
+			res.writeHead(400, { 'Content-Type': 'application/json' });
+			res.end(JSON.stringify({ message: error.message }));
+		}
+	} else if (req.url === '/api/users' && req.method === 'POST') {
+		try {
+			let userData = await getReqData(req);
+			if (validateBody(userData)) {
+				const user = await new User().createUser(JSON.parse(userData));
+				res.writeHead(201, { 'Content-Type': 'application/json' });
+				res.end(JSON.stringify(user));
 			}
+			res.writeHead(400, { 'Content-Type': 'application/json' });
+			res.end(
+				JSON.stringify({
+					message: "Required fields are missing or don't match the type",
+				}),
+			);
+		} catch (error) {
+			res.writeHead(500, { 'Content-Type': 'application/json' });
+			res.end(JSON.stringify({ message: error.message }));
 		}
 	} else {
 		res.writeHead(404, { 'Content-Type': 'application/json' });
