@@ -46,4 +46,11 @@ export default class User {
 			resolve(updatedUser);
 		});
 	}
+
+	async deleteUser(id: string) {
+		return new Promise<void>(resolve => {
+			this._users = this._users.filter(u => u.id !== id);
+			resolve();
+		});
+	}
 }

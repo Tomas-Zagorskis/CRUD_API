@@ -96,5 +96,36 @@ export async function updateUser(req: IncomingMessage, res: ServerResponse) {
 				res.end(JSON.stringify(updatedUser));
 			}
 		}
-	} catch (error) {}
+	} catch (error) {
+		console.log(error);
+		res.writeHead(500, { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({ message: 'Oops, something went wrong!' }));
+	}
+}
+
+export async function deleteUser(req: IncomingMessage, res: ServerResponse) {
+	try {
+		const id = req.url.split('/')[3];
+
+		if (!validate(id)) {
+			res.writeHead(400, { 'Content-Type': 'application/json' });
+			res.end(JSON.stringify({ message: 'Invalid ID' }));
+		}
+
+		const user = await userModel.getUser(id);
+
+		if (!user) {
+			res.writeHead(404, { 'Content-Type': 'application/json' });
+			res.end(JSON.stringify({ message: 'User not found' }));
+		} else {
+			await userModel.deleteUser(id);
+
+			res.writeHead(204, { 'Content-Type': 'application/json' });
+			res.end();
+		}
+	} catch (error) {
+		console.log(error);
+		res.writeHead(500, { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({ message: 'Oops, something went wrong!' }));
+	}
 }
