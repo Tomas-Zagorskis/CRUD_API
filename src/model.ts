@@ -3,19 +3,19 @@ import { v4 } from 'uuid';
 import UserType from './type';
 
 export default class User {
-	users: UserType[] = [];
+	private _users: UserType[] = [];
 
 	constructor() {
-		this.users = users;
+		this._users = users;
 	}
 
 	async getUsers() {
-		return new Promise<UserType[]>(resolve => resolve(this.users));
+		return new Promise<UserType[]>(resolve => resolve(this._users));
 	}
 
 	async getUser(id: string) {
 		return new Promise<UserType | undefined>(resolve => {
-			const user = this.users.find(user => user.id === id);
+			const user = this._users.find(user => user.id === id);
 			resolve(user);
 		});
 	}
@@ -26,8 +26,24 @@ export default class User {
 				id: v4(),
 				...user,
 			};
-			this.users.push(newUser);
+			this._users.push(newUser);
 			resolve(newUser);
+		});
+	}
+
+	async updateUser(user: UserType, userData: string) {
+		return new Promise<UserType>(resolve => {
+			const { username, age, hobbies } = JSON.parse(userData);
+
+			const updatedUser: UserType = {
+				id: user.id,
+				username: username || user.username,
+				age: age || user.age,
+				hobbies: hobbies || user.hobbies,
+			};
+			const index = users.findIndex(u => u.id === user.id);
+			this._users[index] = { ...updatedUser };
+			resolve(updatedUser);
 		});
 	}
 }
