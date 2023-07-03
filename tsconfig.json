@@ -1,0 +1,15 @@
+{
+	"compilerOptions": {
+		"removeComments": true,
+		"lib": ["es6", "dom", "DOM.Iterable"],
+		"strict": true,
+		"target": "es2016",
+		"module": "CommonJS",
+		"moduleResolution": "node",
+		"resolveJsonModule": true,
+		"esModuleInterop": true,
+		"outDir": "./dist"
+	},
+	"exclude": ["node_modules", "dist"],
+	"include": ["src/**/*"]
+}
