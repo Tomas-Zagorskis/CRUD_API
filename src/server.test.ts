@@ -119,7 +119,7 @@ describe('second scenario', () => {
 
 	it("should return message that user isn't found, when updating user", async () => {
 		const updateUser: UserType = {
-			username: 'Mira',
+			username: 'Sam',
 			age: 29,
 			hobbies: ['running'],
 		};
@@ -137,5 +137,63 @@ describe('second scenario', () => {
 		const response = await supertest(server).delete(`${endpoint}/${user.id}`);
 
 		expect(response.statusCode).toBe(404);
+	});
+});
+
+describe('third scenario', () => {
+	const id = '0123456789';
+
+	const user: UserType = {
+		username: 'Adam',
+		age: 40,
+		hobbies: [],
+	};
+
+	it('should return empty array', async () => {
+		const expected = [] satisfies UserType[];
+		const response = await supertest(server).get(endpoint);
+
+		expect(response.statusCode).toBe(200);
+		expect(response.body).toEqual(expected);
+	});
+
+	it("should return message that route isn't found", async () => {
+		const response = await supertest(server).get(`${endpoint}/${id}/something`);
+
+		expect(response.statusCode).toBe(404);
+		expect(response.header['content-type']).toEqual('application/json');
+		expect(response.body.message).toBe('Route not found');
+	});
+
+	it('should return message that id is invalid', async () => {
+		const response = await supertest(server).get(`${endpoint}/${id}`);
+
+		expect(response.statusCode).toBe(400);
+		expect(response.header['content-type']).toEqual('application/json');
+		expect(response.body.message).toBe('Invalid ID');
+	});
+
+	it('should return message that id is invalid, when updating user', async () => {
+		const updateUser: UserType = {
+			username: 'Leo',
+			age: 36,
+			hobbies: [],
+		};
+
+		const response = await supertest(server)
+			.put(`${endpoint}/${user.id}`)
+			.send(updateUser);
+
+		expect(response.statusCode).toBe(400);
+		expect(response.header['content-type']).toEqual('application/json');
+		expect(response.body.message).toBe('Invalid ID');
+	});
+
+	it('should return message that id is invalid, when deleting user', async () => {
+		const response = await supertest(server).delete(`${endpoint}/${user.id}`);
+
+		expect(response.statusCode).toBe(400);
+		expect(response.header['content-type']).toEqual('application/json');
+		expect(response.body.message).toBe('Invalid ID');
 	});
 });
