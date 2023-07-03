@@ -1,6 +1,6 @@
 import supertest from 'supertest';
-import server from './index';
-import UserType from './type';
+import server from './src/index';
+import UserType from './src/type';
 
 const endpoint = '/api/users';
 

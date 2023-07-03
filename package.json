@@ -2,11 +2,11 @@
 	"name": "crud-api",
 	"version": "1.0.0",
 	"description": "",
-	"main": "index.ts",
+	"main": "server.ts",
 	"scripts": {
 		"test": "jest --watchAll --no-cache --detectOpenHandles",
 		"start:dev": "nodemon",
-		"start:prod": "tsc && node ./dist/index.js",
+		"start:prod": "tsc && node ./dist/server.js",
 		"lint": "npx eslint ./src"
 	},
 	"keywords": [
@@ -44,6 +44,6 @@
 			"src"
 		],
 		"ext": "ts",
-		"exec": "ts-node src/index.ts"
+		"exec": "ts-node src/server.ts"
 	}
 }
