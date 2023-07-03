@@ -1,7 +1,4 @@
 import http from 'http';
-import dotenv from 'dotenv';
-dotenv.config();
-
 import {
 	createUser,
 	deleteUser,
@@ -10,7 +7,6 @@ import {
 	updateUser,
 } from './controller';
 
-const PORT = process.env.PORT || 4000;
 const rgxIdRoute = /\/api\/users\/[^/]+$/;
 
 const server = http.createServer(async (req, res) => {
@@ -29,7 +25,5 @@ const server = http.createServer(async (req, res) => {
 		res.end(JSON.stringify({ message: 'Route not found' }));
 	}
 });
-
-server.listen(PORT, () => console.log(`Server running at localhost:${PORT}`));
 
 export default server;
