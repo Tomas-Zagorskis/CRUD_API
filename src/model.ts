@@ -1,13 +1,8 @@
-import { users as mockedUsers } from './data';
 import { v4 } from 'uuid';
 import UserType from './type';
 
 export default class User {
 	private _users: UserType[] = [];
-
-	constructor() {
-		this._users = mockedUsers;
-	}
 
 	async getUsers() {
 		return new Promise<UserType[]>(resolve => resolve(this._users));
