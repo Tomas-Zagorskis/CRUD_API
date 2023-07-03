@@ -11,17 +11,18 @@ import {
 } from './controller';
 
 const PORT = process.env.PORT || 4000;
+const rgxIdRoute = /\/api\/users\/[^/]+$/;
 
 const server = http.createServer(async (req, res) => {
 	if (req.url === '/api/users' && req.method === 'GET') {
-		getUsers(res);
-	} else if (req.url.match(/\/api\/users\/\w+/) && req.method === 'GET') {
+		await getUsers(res);
+	} else if (req.url.match(rgxIdRoute) && req.method === 'GET') {
 		getUser(req, res);
 	} else if (req.url === '/api/users' && req.method === 'POST') {
 		createUser(req, res);
-	} else if (req.url.match(/\/api\/users\/\w+/) && req.method === 'PUT') {
+	} else if (req.url.match(rgxIdRoute) && req.method === 'PUT') {
 		updateUser(req, res);
-	} else if (req.url.match(/\/api\/users\/\w+/) && req.method === 'DELETE') {
+	} else if (req.url.match(rgxIdRoute) && req.method === 'DELETE') {
 		deleteUser(req, res);
 	} else {
 		res.writeHead(404, { 'Content-Type': 'application/json' });
