@@ -6,6 +6,7 @@ import { getReqData, validateBody } from './utils';
 
 const userModel = new User();
 
+// GET api/users
 export async function getUsers(res: ServerResponse) {
 	try {
 		const users = await userModel.getUsers();
@@ -18,9 +19,10 @@ export async function getUsers(res: ServerResponse) {
 	}
 }
 
+// GET api/users/:id
 export async function getUser(req: IncomingMessage, res: ServerResponse) {
 	try {
-		const id = req.url.split('/')[3];
+		const id = req.url!.split('/')[3];
 
 		if (!validate(id)) {
 			res.writeHead(400, { 'Content-Type': 'application/json' });
@@ -43,6 +45,7 @@ export async function getUser(req: IncomingMessage, res: ServerResponse) {
 	}
 }
 
+// POST api/users
 export async function createUser(req: IncomingMessage, res: ServerResponse) {
 	try {
 		const userData = await getReqData(req);
@@ -66,9 +69,10 @@ export async function createUser(req: IncomingMessage, res: ServerResponse) {
 	}
 }
 
+// PUT api/users/:id
 export async function updateUser(req: IncomingMessage, res: ServerResponse) {
 	try {
-		const id = req.url.split('/')[3];
+		const id = req.url!.split('/')[3];
 
 		if (!validate(id)) {
 			res.writeHead(400, { 'Content-Type': 'application/json' });
@@ -103,9 +107,10 @@ export async function updateUser(req: IncomingMessage, res: ServerResponse) {
 	}
 }
 
+// DELETE api/users/:id
 export async function deleteUser(req: IncomingMessage, res: ServerResponse) {
 	try {
-		const id = req.url.split('/')[3];
+		const id = req.url!.split('/')[3];
 
 		if (!validate(id)) {
 			res.writeHead(400, { 'Content-Type': 'application/json' });

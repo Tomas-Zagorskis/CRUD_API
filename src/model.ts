@@ -1,4 +1,4 @@
-import { users } from './data';
+import { users as mockedUsers } from './data';
 import { v4 } from 'uuid';
 import UserType from './type';
 
@@ -6,7 +6,7 @@ export default class User {
 	private _users: UserType[] = [];
 
 	constructor() {
-		this._users = users;
+		this._users = mockedUsers;
 	}
 
 	async getUsers() {
@@ -15,7 +15,7 @@ export default class User {
 
 	async getUser(id: string) {
 		return new Promise<UserType | undefined>(resolve => {
-			const user = this._users.find(user => user.id === id);
+			const user = this._users.find(u => u.id === id);
 			resolve(user);
 		});
 	}
@@ -41,7 +41,7 @@ export default class User {
 				age: age || user.age,
 				hobbies: hobbies || user.hobbies,
 			};
-			const index = users.findIndex(u => u.id === user.id);
+			const index = this._users.findIndex(u => u.id === user.id);
 			this._users[index] = { ...updatedUser };
 			resolve(updatedUser);
 		});
