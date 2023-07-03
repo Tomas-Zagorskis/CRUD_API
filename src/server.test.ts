@@ -75,3 +75,67 @@ describe('first scenario', () => {
 		expect(response.body.message).toBe('User not found');
 	});
 });
+
+describe('second scenario', () => {
+	const user: UserType = {
+		username: 'John',
+		age: 20,
+		hobbies: ['reading', 'jogging'],
+	};
+
+	it('should create new user and return it', async () => {
+		const response = await supertest(server).post(endpoint).send(user);
+
+		expect(response.statusCode).toBe(201);
+		expect(response.header['content-type']).toEqual('application/json');
+		expect(response.body.id).not.toBe('');
+		expect(response.body.username).toBe(user.username);
+		expect(response.body.age).toBe(user.age);
+
+		user.id = response.body.id;
+	});
+
+	it('should delete user by id', async () => {
+		const response = await supertest(server).delete(`${endpoint}/${user.id}`);
+
+		expect(response.statusCode).toBe(204);
+	});
+
+	it('should return empty array', async () => {
+		const expected = [] satisfies UserType[];
+		const response = await supertest(server).get(endpoint);
+
+		expect(response.statusCode).toBe(200);
+		expect(response.body).toEqual(expected);
+	});
+
+	it("should return message that user isn't found", async () => {
+		const response = await supertest(server).get(`${endpoint}/${user.id}`);
+
+		expect(response.statusCode).toBe(404);
+		expect(response.header['content-type']).toEqual('application/json');
+		expect(response.body.message).toBe('User not found');
+	});
+
+	it("should return message that user isn't found, when updating user", async () => {
+		const updateUser: UserType = {
+			username: 'Mira',
+			age: 29,
+			hobbies: ['running'],
+		};
+
+		const response = await supertest(server)
+			.put(`${endpoint}/${user.id}`)
+			.send(updateUser);
+
+		expect(response.statusCode).toBe(404);
+		expect(response.header['content-type']).toEqual('application/json');
+		expect(response.body.message).toBe('User not found');
+	});
+
+	it('should return status code 404, when deleting', async () => {
+		const response = await supertest(server).delete(`${endpoint}/${user.id}`);
+
+		expect(response.statusCode).toBe(404);
+	});
+});
