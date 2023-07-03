@@ -82,7 +82,7 @@ export async function updateUser(req: IncomingMessage, res: ServerResponse) {
 			res.end(JSON.stringify({ message: 'User not found' }));
 		} else {
 			const userData = await getReqData(req);
-			if (!validateBody(userData)) {
+			if (!validateBody(userData, true)) {
 				res.writeHead(400, { 'Content-Type': 'application/json' });
 				res.end(
 					JSON.stringify({
